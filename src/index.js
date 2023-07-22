@@ -40,52 +40,60 @@ const elements = {
 }
 
 elements.select.setAttribute('hidden', true)
+elements.error.setAttribute('hidden')
 
 fetchBreeds()
 .then(data => {
     elements.select.innerHTML = data.map(elem => `<option value="${elem.id}">${elem.name}</option>`).join("");   
 })
 .catch(() => {
-    elements.select.removeAttribute('hidden')
-    elements.loader.removeAttribute('hidden')
     elements.error.removeAttribute('hidden')
 })
-.finally(() => {
-    elements.loader.setAttribute('hidden', true)
-    elements.select.removeAttribute('hidden')
-})
+// .finally(() => {
+//     // elements.loader.setAttribute('hidden', true)
+//     // elements.select.removeAttribute('hidden')
+//     // elements.error.setAttribute('hidden')
+// })
 
 elements.select.addEventListener("change", onChange)
 
 function onChange (evt) {
-    elements.loader.removeAttribute("hidden")
-    elements.select.setAttribute('hidden', true)
-    elements.info.setAttribute('hidden', true)
+    // elements.loader.removeAttribute("hidden")
+    // elements.select.setAttribute('hidden', true)
+    // elements.info.setAttribute('hidden', true)
+    
     fetchCatByBreed(evt.target.value)
     .then(data => {
-        elements.select.removeAttribute('hidden')
-        elements.info.removeAttribute('hidden')
-        const img = data.map(elem =>
-            `<img src="${elem.url}" alt="cat" width="500" height="400">`).join("")
-    elements.info.innerHTML = img
-    data.map(elem => {
-        elem.breeds.forEach(cat => {
-            const array = [cat]
-            const findCatById = array.find(option => option.id === `${evt.target.value}`)
-            const markup = `<div class="flex">
-            <h2>${findCatById.name}</h2>
-            <p>${findCatById.description}</p>
-            <h2>Temperament</h2>
-            <p>${findCatById.temperament}</p>
-            </div>`
+        // elements.select.removeAttribute('hidden')
+        // elements.info.removeAttribute('hidden')
+        
+        const markup = `<img src="${elem.url}" alt="cat" width="500" height="400">
+        <div class="flex">
+    //         <h2>${findCatById.name}</h2>
+    //         <p>${findCatById.description}</p>
+    //         <h2>Temperament</h2>
+    //         <p>${findCatById.temperament}</p>
+    //         </div>`
             elements.info.insertAdjacentHTML("beforeend", markup)
-        });
-       
-    }) 
-    })
+
+    //     const img = data.map(elem =>
+    //         `<img src="${elem.url}" alt="cat" width="500" height="400">`).join("")
+    //         elements.info.innerHTML = img;
+    // data.map(elem => {
+    //     elem.breeds.forEach(cat => {
+    //     const array = [cat]
+    //     const findCatById = array.find(option => option.id === `${evt.target.value}`)
+    //     const markup = `<div class="flex">
+    //         <h2>${findCatById.name}</h2>
+    //         <p>${findCatById.description}</p>
+    //         <h2>Temperament</h2>
+    //         <p>${findCatById.temperament}</p>
+    //         </div>`
+    //         elements.info.insertAdjacentHTML("beforeend", markup)
+    //     })
+    // })
+})
     .catch(() => {
-        elements.select.removeAttribute('hidden')
-        elements.loader.removeAttribute('hidden')
         elements.error.removeAttribute("hidden")
     })
     .finally(() => elements.loader.setAttribute("hidden", true))
