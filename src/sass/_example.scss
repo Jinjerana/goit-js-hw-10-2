@@ -26,3 +26,33 @@
   background-size: cover;
   background-position: center;
 }
+
+.body {
+  margin: 20px;
+}
+
+.breed-select {
+    background: #fff;
+    border-radius: 10px;
+    border-width: 3px;
+    padding: 20px;
+    font-size: 28px;
+  font-weight: 700;
+  background-color: #acf2f7;
+    text-align: left;
+    transition: all 0.2s;
+    margin: 0 auto;
+    width: 500px;
+}
+
+.cat-info {
+  display: flex;
+  flex-wrap: wrap;
+  width: 500px;
+  font-size: 20px;
+}
+
+.flex {
+  display: flex;
+  flex-wrap: wrap;
+}
