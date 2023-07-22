@@ -23,6 +23,18 @@ export function fetchCatByBreed(breedId) {
     })
 }
 
+export function createMarkup(arr) {
+    
+    const { url, breeds } = arr[0];
+    return `<img src="${url}" alt="cat" width="500" height="400">
+    <div class="flex">
+       <h2>${breeds[0].name}</h2>
+       <p>${breeds[0].description}</p>
+        <h2>Temperament</h2>
+        <p>${breeds[0].temperament}</p>
+        </div>`;
+}    
+
 // const options = {
 //     headers: {'x-api-key' :
 //      "live_853h5N3izhrnKXdCzPmzMcGOHbtRAQ4h0bF4aqt9D6MCHfnwSzBfDHn3zebI1qeh"

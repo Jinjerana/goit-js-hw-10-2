@@ -3,7 +3,7 @@ import axios from "axios";
 // axios.defaults.headers.common["x-api-key"] =
 //  "live_853h5N3izhrnKXdCzPmzMcGOHbtRAQ4h0bF4aqt9D6MCHfnwSzBfDHn3zebI1qeh";
 
-import {fetchBreeds, fetchCatByBreed} from './cat-api'
+import {fetchBreeds, fetchCatByBreed, createMarkup} from './cat-api'
 
 //  const instance = axios.create({
 //     baseURL = "https://api.thecatapi.com/v1/breeds",
@@ -40,50 +40,59 @@ const elements = {
 }
 
 elements.select.setAttribute('hidden', true)
-elements.error.setAttribute('hidden')
+elements.error.setAttribute('hidden', true)
 
 fetchBreeds()
 .then(data => {
+    
     elements.select.innerHTML = data.map(elem => `<option value="${elem.id}">${elem.name}</option>`).join("");   
 })
 .catch(() => {
     elements.error.removeAttribute('hidden')
 })
-// .finally(() => {
-//     // elements.loader.setAttribute('hidden', true)
-//     // elements.select.removeAttribute('hidden')
-//     // elements.error.setAttribute('hidden')
-// })
+.finally(() => {
+    elements.loader.setAttribute('hidden', true)
+    elements.select.removeAttribute('hidden')
+})
 
 elements.select.addEventListener("change", onChange)
 
 function onChange (evt) {
-    // elements.loader.removeAttribute("hidden")
+    evt.preventDefault();
+    elements.loader.removeAttribute("hidden")
     // elements.select.setAttribute('hidden', true)
     // elements.info.setAttribute('hidden', true)
-    
     fetchCatByBreed(evt.target.value)
     .then(data => {
-        // elements.select.removeAttribute('hidden')
-        // elements.info.removeAttribute('hidden')
+        elements.select.removeAttribute('hidden')
+        elements.info.removeAttribute('hidden')
+       
+            elements.info.innerHTML = createMarkup(data)
+    // }    
         
-        const markup = `<img src="${elem.url}" alt="cat" width="500" height="400">
-        <div class="flex">
-    //         <h2>${findCatById.name}</h2>
-    //         <p>${findCatById.description}</p>
+        // const img = data.map(elem =>
+        //     `<img src="${elem.url}" alt="cat" width="500" height="400">`).join("")
+        //     elements.info.innerHTML = img;
+        //     const array = [cat]
+        //     const findCatById = array.find(option => option.id === `${evt.target.value}`)
+        //     const markup = `
+    //     <div class="flex">
+    //        <h2>${findCatById.name}</h2>
+    //        <p>${findCatById.description}</p>
     //         <h2>Temperament</h2>
     //         <p>${findCatById.temperament}</p>
     //         </div>`
-            elements.info.insertAdjacentHTML("beforeend", markup)
+    //         elements.info.insertAdjacentHTML("beforeend", markup)
 
-    //     const img = data.map(elem =>
-    //         `<img src="${elem.url}" alt="cat" width="500" height="400">`).join("")
-    //         elements.info.innerHTML = img;
-    // data.map(elem => {
-    //     elem.breeds.forEach(cat => {
-    //     const array = [cat]
-    //     const findCatById = array.find(option => option.id === `${evt.target.value}`)
-    //     const markup = `<div class="flex">
+
+    // //     const img = data.map(elem =>
+    // //         `<img src="${elem.url}" alt="cat" width="500" height="400">`).join("")
+    // //         elements.info.innerHTML = img;
+    // // data.map(elem => {
+    // //     elem.breeds.forEach(cat => {
+    // //     const array = [cat]
+    // //     const findCatById = array.find(option => option.id === `${evt.target.value}`)
+    // //     const markup = `<div class="flex">
     //         <h2>${findCatById.name}</h2>
     //         <p>${findCatById.description}</p>
     //         <h2>Temperament</h2>
@@ -95,6 +104,9 @@ function onChange (evt) {
 })
     .catch(() => {
         elements.error.removeAttribute("hidden")
+      
+    // elements.info.setAttribute('hidden', true)
+    // flex.setAttribute('hidden')
     })
     .finally(() => elements.loader.setAttribute("hidden", true))
 }
