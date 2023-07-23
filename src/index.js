@@ -3,7 +3,7 @@ import axios from "axios";
 // axios.defaults.headers.common["x-api-key"] =
 //  "live_853h5N3izhrnKXdCzPmzMcGOHbtRAQ4h0bF4aqt9D6MCHfnwSzBfDHn3zebI1qeh";
 
-import {fetchBreeds, fetchCatByBreed, createMarkup} from './cat-api'
+import {fetchBreeds, fetchCatByBreed} from './cat-api'
 
 //  const instance = axios.create({
 //     baseURL = "https://api.thecatapi.com/v1/breeds",
@@ -45,21 +45,25 @@ elements.error.setAttribute('hidden', true)
 fetchBreeds()
 .then(data => {
     
-    elements.select.innerHTML = data.map(elem => `<option value="${elem.id}">${elem.name}</option>`).join("");   
+    elements.select.innerHTML = data.map(elem => `<option value="${elem.id}">${elem.name}</option>`).join("");
+       
 })
 .catch(() => {
     elements.error.removeAttribute('hidden')
+    
 })
 .finally(() => {
     elements.loader.setAttribute('hidden', true)
     elements.select.removeAttribute('hidden')
+    
 })
 
 elements.select.addEventListener("change", onChange)
 
 function onChange (evt) {
-    evt.preventDefault();
+    
     elements.loader.removeAttribute("hidden")
+    elements.error.setAttribute('hidden', true)
     // elements.select.setAttribute('hidden', true)
     // elements.info.setAttribute('hidden', true)
     fetchCatByBreed(evt.target.value)
@@ -68,6 +72,19 @@ function onChange (evt) {
         elements.info.removeAttribute('hidden')
        
             elements.info.innerHTML = createMarkup(data)
+
+            function createMarkup(arr) {
+    
+                const { url, breeds } = arr[0];
+                
+                return `<img src="${url}" alt="cat" width="500" height="400">
+                <div class="flex">
+                   <h2>${breeds[0].name}</h2>
+                   <p>${breeds[0].description}</p>
+                    <h2>Temperament</h2>
+                    <p>${breeds[0].temperament}</p>
+                    </div>`;
+            }    
     // }    
         
         // const img = data.map(elem =>
@@ -104,9 +121,12 @@ function onChange (evt) {
 })
     .catch(() => {
         elements.error.removeAttribute("hidden")
+        elements.info.innerHTML = ""
+        
       
     // elements.info.setAttribute('hidden', true)
     // flex.setAttribute('hidden')
     })
-    .finally(() => elements.loader.setAttribute("hidden", true))
+    .finally(() => elements.loader.setAttribute("hidden", true)
+    )
 }
